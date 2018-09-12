@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import cn.bill.quartz.service.ICronService;
+
 /**
  * Description: 自启动程序配置<br/>
  * Date:2018年9月12日 上午11:31:01 <br/>
@@ -17,6 +19,8 @@ public class AutoStartConfiguration
 {
 	@Autowired
 	QuartzManager quartzManager;
+	@Autowired
+	private ICronService iCronService;
 	/**
 	 * 自启动定时器任务
 	 * @return
@@ -27,10 +31,13 @@ public class AutoStartConfiguration
 	{
 		try
 		{
-			System.out.println("初始化QuartzTaskStartBean，并启动定时器");
-			System.out.println("quartzManager==null::"+(quartzManager==null));
-			quartzManager.start("1");
-			quartzManager.start("2");
+			if(quartzManager!=null)
+			{
+				System.out.println("自启动QuartzTask成功");
+				quartzManager.start(iCronService.findByCronId("1"));
+				quartzManager.start(iCronService.findByCronId("2"));
+				quartzManager.start(iCronService.findByCronId("3"));
+			}
 		} catch (SchedulerException e)
 		{
 			e.printStackTrace();

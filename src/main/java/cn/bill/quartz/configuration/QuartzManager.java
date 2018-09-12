@@ -16,24 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import cn.bill.quartz.entity.CronEntity;
-import cn.bill.quartz.service.ICronService;
-
+/**
+ * 
+ * Description: Quartz定时器管理类<br/>
+ * Date:2018年9月12日 下午1:21:20 <br/>
+ *
+ * @author fengminbiao@126.com
+ * @version
+ */
 @Configuration
 public class QuartzManager
 {
 	@Autowired
 	private Scheduler scheduler;
-	@Autowired
-	private ICronService iCronService;
-	
 	/**
 	 * 启动定时器
-	 * @param id 表达式管理器Id
+	 * @param cronEntity 表达式管理器
 	 * @throws SchedulerException
 	 */
-	public void start(String id) throws SchedulerException
+	public void start(CronEntity cronEntity) throws SchedulerException
 	{
-		CronEntity cronEntity = iCronService.findByCronId(id);
 		if (cronEntity != null)
 		{
 			startJob(scheduler, cronEntity.getQuarzName(), cronEntity.getCron(), cronEntity.getSchedulerClass());
